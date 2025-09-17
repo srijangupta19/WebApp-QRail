@@ -4,219 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Indian Railways</title>
-    <style>
-        /* General Styles */
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            background-color: #f0f2f5;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        /* Header Styles */
-        .header {
-            width: 100%;
-            padding: 10px 20px;
-            background-color: #0d47a1;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-sizing: border-box;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .language-selector {
-            display: flex;
-            align-items: center;
-            background-color: rgba(255, 255, 255, 0.2);
-            padding: 5px 10px;
-            border-radius: 20px;
-        }
-
-        .language-icon {
-            font-size: 1.2em;
-            margin-right: 5px;
-        }
-        
-        .logo {
-            text-align: right;
-            line-height: 1.2;
-            flex-grow: 1;
-        }
-
-        .app-name {
-            font-size: 1.5em;
-            font-weight: bold;
-        }
-
-        .app-subname {
-            font-size: 0.9em;
-            display: block;
-        }
-        
-        .back-arrow {
-            font-size: 2em;
-            color: white;
-            text-decoration: none;
-            margin-right: auto;
-            display: none; /* Initially hidden */
-        }
-
-        /* Main Content Container */
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 90%;
-            max-width: 400px;
-            padding: 20px;
-            text-align: center;
-            flex-grow: 1;
-            justify-content: flex-start;
-        }
-
-        /* Welcome Screen Specific Styles */
-        #welcome-screen {
-            display: flex; /* Initially visible */
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            flex-grow: 1;
-            width: 100%;
-        }
-
-        .welcome-heading {
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .train-image-container {
-            width: 150px;
-            height: 150px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .train-image {
-            max-width: 100%;
-            max-height: 100%;
-        }
-
-        .login-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            width: 100%;
-        }
-
-        .login-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 1.1em;
-            font-weight: bold;
-            color: white;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s;
-        }
-
-        .inspector-login {
-            background-color: #007c29;
-        }
-
-        .admin-login {
-            background-color: #0056b3;
-        }
-
-        .button-icon {
-            margin-right: 10px;
-        }
-
-        .button-icon img {
-            height: 35px;
-            width: 35px;
-        }
-
-        /* Login Screen Styles (Shared by Inspector & Admin) */
-        .login-screen {
-            display: none; /* Initially hidden */
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            flex-grow: 1;
-            width: 100%;
-            padding-top: 50px;
-        }
-
-        .login-heading {
-            font-size: 2em;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 30px;
-        }
-
-        .login-image {
-            width: 150px;
-            height: auto;
-            margin-bottom: 40px;
-        }
-
-        .input-group {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .input-field {
-            display: flex;
-            align-items: center;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .input-field input {
-            border: none;
-            outline: none;
-            flex-grow: 1;
-            padding: 5px 10px;
-            font-size: 1em;
-        }
-
-        .input-icon {
-            font-size: 1.2em;
-            color: #555;
-            margin-right: 10px;
-        }
-
-        .forgot-password {
-            color: #0056b3;
-            text-decoration: none;
-            font-size: 0.9em;
-            margin-top: 10px;
-            align-self: flex-start;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header class="header">
         <a href="#" id="back-button" class="back-arrow">&larr;</a>
+        <a href="#" id="hamburger-menu" class="hamburger-menu">&#9776;</a>
         <div class="language-selector" id="language-selector-main">
             <span class="language-icon">&#x1F310;</span> <span class="language-text">हिन्दी</span>
         </div>
@@ -239,7 +32,7 @@
                     </span>
                     LOGIN AS INSPECTOR
                 </button>
-                <button class="login-button admin-login" data-target="admin">
+                <button class="login-button admin-login" data-target="admin-portal">
                     <span class="button-icon">
                         <img src="6b62eade27e9bac7afa88754c3a0c46242c00882.png" alt="Admin icon">
                     </span>
@@ -260,6 +53,7 @@
                 </div>
             </div>
             <a href="#" class="forgot-password">Forgot Password?</a>
+            <button class="login-submit-btn" data-target="inspector-portal">Log In</button>
         </div>
 
         <div id="admin-login-screen" class="login-screen">
@@ -274,44 +68,56 @@
                 </div>
             </div>
             <a href="#" class="forgot-password">Forgot Password?</a>
+            <button class="login-submit-btn" data-target="admin-portal">Log In</button>
+        </div>
+
+        <div id="inspector-portal-screen">
+            <h1 class="portal-heading">INSPECTOR<br>PORTAL</h1>
+            <img src="be3bcde9fc55235aa4b035637d20db6ca32b2cad.png" alt="Train icon" class="login-image">
+            <div class="login-buttons">
+                <button class="login-button inspector-login">
+                    <span class="button-icon">
+                        <img src="sl.png" alt="Sleeper icon">
+                    </span>
+                    INSTALL A NEW SLEEPER
+                </button>
+                <button class="login-button admin-login">
+                    <span class="button-icon">
+                        <img src="sp.png" alt="Scan icon">
+                    </span>
+                    SCAN FOR INSPECTION
+                </button>
+            </div>
+        </div>
+        
+        <div id="admin-dashboard">
+            <h1 class="dashboard-heading">Admin Dashboard</h1>
+            <div class="card-grid">
+                <div class="card">
+                    <img src="future.png" alt="vendor" border="0">
+                    <div class="card-title">Future Inspection<br>Dates</div>
+                </div>
+                <div class="card">
+                    <img src="pro.png" alt="Next Procurement" >
+                    <div class="card-title">Next Procurement</div>
+                </div>
+                <div class="card">
+                    <img src="zonal.png" alt="Zonal Analysis">
+                    <div class="card-title">Zonal Analysis</div>
+                </div>
+                <div class="card">
+                    <img src="vendor.png" alt="Vendor Comparison" >
+                    <div class="card-title">Vendor Comparison</div>
+                </div>
+                <div class="card">
+                    <img src="fifth.png" alt="Performance" >
+                    <div class="card-title">Performance</div>
+                </div>
+                <div class="card" style="visibility: hidden;"></div>
+            </div>
         </div>
     </main>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const welcomeScreen = document.getElementById('welcome-screen');
-            const inspectorLoginScreen = document.getElementById('inspector-login-screen');
-            const adminLoginScreen = document.getElementById('admin-login-screen');
-            const backButton = document.getElementById('back-button');
-            const languageSelector = document.getElementById('language-selector-main');
-
-            const loginButtons = document.querySelectorAll('.login-button');
-            loginButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const target = button.getAttribute('data-target');
-                    welcomeScreen.style.display = 'none';
-                    languageSelector.style.display = 'none';
-                    backButton.style.display = 'inline';
-                    
-                    if (target === 'inspector') {
-                        inspectorLoginScreen.style.display = 'flex';
-                        adminLoginScreen.style.display = 'none';
-                    } else if (target === 'admin') {
-                        inspectorLoginScreen.style.display = 'none';
-                        adminLoginScreen.style.display = 'flex';
-                    }
-                });
-            });
-
-            backButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                inspectorLoginScreen.style.display = 'none';
-                adminLoginScreen.style.display = 'none';
-                welcomeScreen.style.display = 'flex';
-                backButton.style.display = 'none';
-                languageSelector.style.display = 'flex';
-            });
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
