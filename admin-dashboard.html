@@ -71,6 +71,24 @@
             flex-grow: 1;
             justify-content: flex-start;
         }
+         .btn.back-to-portal {
+            background-color: #0056b3;
+            margin-bottom: 20px; /* Spacing from the form */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+            text-decoration: none;
+            width: 100%;
+        }
 
         /* Admin Dashboard Styles */
         #admin-dashboard {
@@ -187,6 +205,9 @@
     </header>
 
     <main class="main-content">
+        <a href="index.html" class="btn back-to-portal">
+            ⬅ Back to Home
+        </a>
         <div id="admin-dashboard">
             <h1 class="dashboard-heading">Admin Dashboard</h1>
             <div class="card-grid">

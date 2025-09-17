@@ -45,19 +45,15 @@
             display: block;
         }
 
-        .back-arrow, .hamburger-menu {
+        /* The back-arrow is now removed from the header */
+        .back-arrow {
+            display: none;
+        }
+        
+        .hamburger-menu {
             font-size: 2em;
             color: white;
             text-decoration: none;
-        }
-
-        .back-arrow {
-            order: -1;
-            margin-right: auto;
-        }
-
-        .hamburger-menu {
-            margin-left: auto;
         }
 
         /* Main Content Container */
@@ -71,6 +67,26 @@
             text-align: center;
             flex-grow: 1;
             justify-content: flex-start;
+        }
+
+        /* "Back to Portal" button at the top of the main content */
+        .btn.back-to-portal {
+            background-color: #0056b3;
+            margin-bottom: 20px; /* Spacing from the form */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+            text-decoration: none;
+            width: 100%;
         }
 
         /* Inspector Portal Styles */
@@ -142,7 +158,7 @@
 </head>
 <body>
     <header class="header">
-        <a href="index.html" class="back-arrow">&larr;</a>
+        <a href="index.html" class="back-arrow" style="display: none;">&larr;</a>
         <a href="#" class="hamburger-menu">&#9776;</a>
         <div class="logo">
             <span class="app-name">भारतीय रेल</span>
@@ -151,6 +167,9 @@
     </header>
 
     <main class="main-content">
+        <a href="index.html" class="btn back-to-portal">
+            ⬅ Back to Home
+        </a>
         <div id="inspector-portal-screen">
             <h1 class="portal-heading">INSPECTOR<br>PORTAL</h1>
             <img src="be3bcde9fc55235aa4b035637d20db6ca32b2cad.png" alt="Train icon" class="login-image">

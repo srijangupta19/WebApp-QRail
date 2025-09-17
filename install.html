@@ -1,81 +1,231 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Install Sleeper</title>
-  <link rel="stylesheet" href="style1.css">
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Railways - Install Sleeper</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
 
-    // 🔹 Firebase Config
-    const firebaseConfig = {
-      apiKey: "AIzaSyDVaRCfAz11NtcXp0WpDhHCc85QuyEbFSk",
-      authDomain: "sih-trial-122f8.firebaseapp.com",
-      projectId: "sih-trial-122f8",
-      storageBucket: "sih-trial-122f8.appspot.com",
-      messagingSenderId: "773497361291",
-      appId: "1:773497361291:web:3dc8ed3f42164c144c158e",
-      measurementId: "G-VJGRQZ71CB"
-    };
+        /* Header Styles */
+        .header {
+            width: 100%;
+            padding: 10px 20px;
+            background-color: #0d47a1;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+        .logo {
+            text-align: right;
+            line-height: 1.2;
+            flex-grow: 1;
+        }
 
-    window.addEventListener("DOMContentLoaded", () => {
-      const form = document.getElementById("addPartForm");
+        .app-name {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
 
-      form.addEventListener("submit", async e => {
-        e.preventDefault();
+        .app-subname {
+            font-size: 0.9em;
+            display: block;
+        }
 
-        const data = {
-          part_type: document.getElementById("partType").value,
-          vendor: document.getElementById("vendor").value,
-          zone: document.getElementById("zone").value,
-          manufacture_date: document.getElementById("mDate").value,
-          next_predicted_inspection: document.getElementById("nDate").value,
-          inspection_dates: [document.getElementById("iDate").value],
-          performance_class: document.getElementById("status").value,
-          faults: { damaged: 0, unclipped: 0, missing: 0 }
-        };
+        /* Remove the back-arrow from the header */
+        .back-arrow {
+            display: none;
+        }
+        
+        .hamburger-menu {
+            font-size: 2em;
+            color: white;
+            text-decoration: none;
+            margin-left: auto;
+        }
 
-        const qrId = "QR" + Date.now();
-        await addDoc(collection(db, "railway_parts", qrId, "parts"), data);
+        /* Main Content Container */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+            max-width: 450px;
+            padding: 20px;
+            text-align: center;
+            flex-grow: 1;
+            justify-content: flex-start;
+        }
 
-        alert(`✅ Sleeper installed with QR: ${qrId}`);
-        form.reset();
-      });
-    });
-  </script>
+        /* Back to Portal Button at the top of the main content */
+        .btn.back-to-portal {
+            background-color: #0056b3;
+            margin-bottom: 20px; /* Spacing from the form */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+            text-decoration: none;
+            width: 100%;
+        }
+        
+        /* Form Card Styles */
+        .form-card {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .form-card h3 {
+            font-size: 1.5em;
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        /* Input and Select Styles */
+        input[type="text"], input[type="date"], select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        label {
+            align-self: flex-start;
+            font-size: 0.9em;
+            color: #555;
+            margin-top: 5px;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+            text-decoration: none;
+            width: 100%;
+        }
+
+        .btn.green {
+            background-color: #007c29;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>📌 Install a New Sleeper</h1>
-  </header>
+    <header class="header">
+        <a href="#" class="hamburger-menu">&#9776;</a>
+        <div class="logo">
+            <span class="app-name">भारतीय रेल</span>
+            <span class="app-subname">INDIAN RAILWAYS</span>
+        </div>
+    </header>
 
-  <main>
-    <form id="addPartForm" class="form-card">
-      <h3>Install New part</h3>
-      <input type="text" id="partType" placeholder="Part Type" required>
-      <input type="text" id="vendor" placeholder="Vendor" required>
-      <input type="text" id="zone" placeholder="Zone" required>
-      <label>Manufacture Date:</label>
-      <input type="date" id="mDate" required>
-      <label>Next Inspection:</label>
-      <input type="date" id="nDate" required>
-      <label>Initial Inspection:</label>
-      <input type="date" id="iDate" required>
-      <select id="status">
-        <option>Good</option>
-        <option>Average</option>
-        <option>Poor</option>
-        <option>Needs Replacement</option>
-      </select>
-      <button type="submit" class="btn green">Install Sleeper</button>
-    </form>
+    <main class="main-content">
+        <a href="inspector-portal.html" class="btn back-to-portal">
+            ⬅ Back to Portal
+        </a>
+        <form id="addPartForm" class="form-card">
+            <h3>Install New part</h3>
+            <input type="text" id="partType" placeholder="Part Type" required>
+            <input type="text" id="vendor" placeholder="Vendor" required>
+            <input type="text" id="zone" placeholder="Zone" required>
+            <label for="mDate">Manufacture Date:</label>
+            <input type="date" id="mDate" required>
+            <label for="nDate">Next Inspection:</label>
+            <input type="date" id="nDate" required>
+            <label for="iDate">Initial Inspection:</label>
+            <input type="date" id="iDate" required>
+            <select id="status">
+                <option value="Good">Good</option>
+                <option value="Average">Average</option>
+                <option value="Poor">Poor</option>
+                <option value="Needs Replacement">Needs Replacement</option>
+            </select>
+            <button type="submit" class="btn green">Install Sleeper</button>
+        </form>
+    </main>
 
-    <br>
-    <button class="btn blue" onclick="window.location.href='index.html'">⬅ Back to Portal</button>
-  </main>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // 🔹 Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDVaRCfAz11NtcXp0WpDhHCc85QuyEbFSk",
+            authDomain: "sih-trial-122f8.firebaseapp.com",
+            projectId: "sih-trial-122f8",
+            storageBucket: "sih-trial-122f8.appspot.com",
+            messagingSenderId: "773497361291",
+            appId: "1:773497361291:web:3dc8ed3f42164c144c158e",
+            measurementId: "G-VJGRQZ71CB"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("addPartForm");
+
+            form.addEventListener("submit", async e => {
+                e.preventDefault();
+
+                const data = {
+                    part_type: document.getElementById("partType").value,
+                    vendor: document.getElementById("vendor").value,
+                    zone: document.getElementById("zone").value,
+                    manufacture_date: document.getElementById("mDate").value,
+                    next_predicted_inspection: document.getElementById("nDate").value,
+                    inspection_dates: [document.getElementById("iDate").value],
+                    performance_class: document.getElementById("status").value,
+                    faults: { damaged: 0, unclipped: 0, missing: 0 }
+                };
+
+                const qrId = "QR" + Date.now();
+                await addDoc(collection(db, "railway_parts", qrId, "parts"), data);
+
+                alert(`✅ Sleeper installed with QR: ${qrId}`);
+                form.reset();
+            });
+        });
+    </script>
 </body>
 </html>
