@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Railways - Admin Login</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            width: 100%;
+            padding: 10px 20px;
+            background-color: #0d47a1;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            text-align: right;
+            line-height: 1.2;
+            flex-grow: 1;
+        }
+
+        .app-name {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .app-subname {
+            font-size: 0.9em;
+            display: block;
+        }
+        
+        .back-arrow {
+            font-size: 2em;
+            color: white;
+            text-decoration: none;
+            margin-right: auto;
+        }
+        
+        .hamburger-menu, .language-selector {
+            display: none;
+        }
+
+        /* Main Content Container */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            text-align: center;
+            flex-grow: 1;
+            justify-content: flex-start;
+        }
+
+        /* Login Screen Styles */
+        .login-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            flex-grow: 1;
+            width: 100%;
+            padding-top: 50px;
+        }
+
+        .login-heading {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .login-image {
+            width: 150px;
+            height: auto;
+            margin-bottom: 40px;
+        }
+
+        .input-group {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .input-field {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-field input {
+            border: none;
+            outline: none;
+            flex-grow: 1;
+            padding: 5px 10px;
+            font-size: 1em;
+        }
+
+        .input-icon {
+            font-size: 1.2em;
+            color: #555;
+            margin-right: 10px;
+        }
+
+        .forgot-password {
+            color: #0056b3;
+            text-decoration: none;
+            font-size: 0.9em;
+            margin-top: 10px;
+            align-self: flex-start;
+        }
+
+        .login-submit-btn {
+            background-color: #007c29;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            text-align: center;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="back-arrow">&larr;</a>
+        <div class="logo">
+            <span class="app-name">भारतीय रेल</span>
+            <span class="app-subname">INDIAN RAILWAYS</span>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="login-screen">
+            <h1 class="login-heading">LOGIN AS ADMIN</h1>
+            <img src="be3bcde9fc55235aa4b035637d20db6ca32b2cad.png" alt="Train icon" class="login-image">
+            <div class="input-group">
+                <div class="input-field">
+                    <span class="input-icon">&#x1F464;</span> <input type="text" placeholder="Username">
+                </div>
+                <div class="input-field">
+                    <span class="input-icon">&#x1F512;</span> <input type="password" placeholder="Password">
+                </div>
+            </div>
+            <a href="#" class="forgot-password">Forgot Password?</a>
+            <a href="admin-dashboard.html" class="login-submit-btn">Log In</a>
+        </div>
+    </main>
+</body>
+</html>

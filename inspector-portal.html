@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Railways - Inspector Portal</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            width: 100%;
+            padding: 10px 20px;
+            background-color: #0d47a1;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            text-align: right;
+            line-height: 1.2;
+            flex-grow: 1;
+        }
+
+        .app-name {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .app-subname {
+            font-size: 0.9em;
+            display: block;
+        }
+        
+        .back-arrow {
+            font-size: 2em;
+            color: white;
+            text-decoration: none;
+            margin-right: auto;
+        }
+        
+        .hamburger-menu {
+            font-size: 2em;
+            color: white;
+            text-decoration: none;
+            margin-right: auto;
+        }
+
+        /* Main Content Container */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            text-align: center;
+            flex-grow: 1;
+            justify-content: flex-start;
+        }
+
+        /* Inspector Portal Styles */
+        #inspector-portal-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            flex-grow: 1;
+            width: 100%;
+            padding-top: 50px;
+        }
+
+        .portal-heading {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        .login-image {
+            width: 150px;
+            height: auto;
+            margin-bottom: 40px;
+        }
+
+        .login-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .login-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+        }
+
+        .inspector-login {
+            background-color: #007c29;
+        }
+
+        .admin-login {
+            background-color: #0056b3;
+        }
+
+        .button-icon {
+            margin-right: 10px;
+        }
+
+        .button-icon img {
+            height: 35px;
+            width: 35px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="back-arrow">&larr;</a>
+        <a href="#" class="hamburger-menu">&#9776;</a>
+        <div class="logo">
+            <span class="app-name">भारतीय रेल</span>
+            <span class="app-subname">INDIAN RAILWAYS</span>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div id="inspector-portal-screen">
+            <h1 class="portal-heading">INSPECTOR<br>PORTAL</h1>
+            <img src="be3bcde9fc55235aa4b035637d20db6ca32b2cad.png" alt="Train icon" class="login-image">
+            <div class="login-buttons">
+                <button class="login-button inspector-login">
+                    <span class="button-icon">
+                        <img src="sl.png" alt="Sleeper icon">
+                    </span>
+                    INSTALL A NEW SLEEPER
+                </button>
+                <button class="login-button admin-login">
+                    <span class="button-icon">
+                        <img src="sp.png" alt="Scan icon">
+                    </span>
+                    SCAN FOR INSPECTION
+                </button>
+            </div>
+        </div>
+    </main>
+    <script>
+        // No specific JS for screen transitions needed on this page, as links are static
+        // You could add logic for the hamburger menu or other features here if needed.
+    </script>
+</body>
+</html>

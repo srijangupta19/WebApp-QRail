@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Railways - Admin Dashboard</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            width: 100%;
+            padding: 10px 20px;
+            background-color: #0d47a1;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            text-align: right;
+            line-height: 1.2;
+            flex-grow: 1;
+        }
+
+        .app-name {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .app-subname {
+            font-size: 0.9em;
+            display: block;
+        }
+        
+        .back-arrow {
+            font-size: 2em;
+            color: white;
+            text-decoration: none;
+            margin-right: auto;
+        }
+        
+        .hamburger-menu {
+            font-size: 2em;
+            color: white;
+            text-decoration: none;
+            margin-right: auto;
+        }
+
+        /* Main Content Container */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            text-align: center;
+            flex-grow: 1;
+            justify-content: flex-start;
+        }
+
+        /* Admin Dashboard Styles */
+        #admin-dashboard {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        .dashboard-heading {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .card {
+            background-color: #e8eaf6;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 1em;
+            font-weight: bold;
+            color: #333;
+            line-height: 1.2;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Desktop-specific adjustments for Admin Dashboard */
+        @media (min-width: 768px) {
+            .main-content {
+                max-width: 800px;
+            }
+            .dashboard-heading {
+                font-size: 2.5em;
+            }
+            .card-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 40px;
+            }
+            .card .card-icon {
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+                height: 100px;
+                width: 100px;
+                margin-bottom: 20px;
+            }
+            .card .card-icon img {
+                display: none;
+            }
+
+            .card:nth-child(4) .card-icon {
+                background-image: url('https://i.ibb.co/F80s5tG/people-gears.png');
+            }
+            .card:nth-child(5) .card-icon {
+                background-image: url('https://i.ibb.co/q5q95vD/graph-gear.png');
+            }
+            .card:nth-child(1) .card-icon {
+                background-image: url('https://i.ibb.co/6P0xH2n/gear-magnifying-glass.png');
+            }
+            .card:nth-child(2) .card-icon {
+                background-image: url('https://i.ibb.co/3sWbT5G/gear-cart.png');
+            }
+            .card:nth-child(3) .card-icon {
+                background-image: url('https://i.ibb.co/mCb2xL2/magnifying-glass-graph.png');
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="back-arrow">&larr;</a>
+        <a href="#" class="hamburger-menu">&#9776;</a>
+        <div class="logo">
+            <span class="app-name">भारतीय रेल</span>
+            <span class="app-subname">INDIAN RAILWAYS</span>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div id="admin-dashboard">
+            <h1 class="dashboard-heading">Admin Dashboard</h1>
+            <div class="card-grid">
+                <div class="card">
+                    <img src="future.png" alt="vendor" border="0">
+                    <div class="card-title">Future Inspection<br>Dates</div>
+                </div>
+                <div class="card">
+                    <img src="pro.png" alt="Next Procurement" >
+                    <div class="card-title">Next Procurement</div>
+                </div>
+                <div class="card">
+                    <img src="zonal.png" alt="Zonal Analysis">
+                    <div class="card-title">Zonal Analysis</div>
+                </div>
+                <div class="card">
+                    <img src="vendor.png" alt="Vendor Comparison" >
+                    <div class="card-title">Vendor Comparison</div>
+                </div>
+                <div class="card">
+                    <img src="fifth.png" alt="Performance" >
+                    <div class="card-title">Performance</div>
+                </div>
+                <div class="card" style="visibility: hidden;"></div>
+            </div>
+        </div>
+    </main>
+    <script>
+        // No specific JS for screen transitions needed on this page, as links are static
+        // You could add logic for the hamburger menu or other features here if needed.
+    </script>
+</body>
+</html>
