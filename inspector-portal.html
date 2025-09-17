@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Indian Railways - Inspector Portal</title>
     <style>
-        /* General Styles from both codes */
+        /* General Styles */
         body {
             font-family: 'Times New Roman', Times, serif;
             background-color: #f0f2f5;
@@ -16,7 +16,7 @@
             min-height: 100vh;
         }
 
-        /* Header Styles from both codes, merged */
+        /* Header Styles */
         .header {
             width: 100%;
             padding: 10px 20px;
@@ -28,7 +28,7 @@
             box-sizing: border-box;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        
+
         .logo {
             text-align: right;
             line-height: 1.2;
@@ -44,19 +44,20 @@
             font-size: 0.9em;
             display: block;
         }
-        
-        .back-arrow {
+
+        .back-arrow, .hamburger-menu {
             font-size: 2em;
             color: white;
             text-decoration: none;
+        }
+
+        .back-arrow {
+            order: -1;
             margin-right: auto;
         }
-        
+
         .hamburger-menu {
-            font-size: 2em;
-            color: white;
-            text-decoration: none;
-            margin-right: auto;
+            margin-left: auto;
         }
 
         /* Main Content Container */
@@ -96,7 +97,7 @@
             height: auto;
             margin-bottom: 40px;
         }
-        
+
         /* Combined Button Styles */
         .login-buttons {
             display: flex;
@@ -118,17 +119,17 @@
             cursor: pointer;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s;
-            text-decoration: none; /* Added for anchor tags */
+            text-decoration: none;
         }
-        
-        .inspector-login, .btn.green {
+
+        .inspector-login {
             background-color: #007c29;
         }
 
-        .admin-login, .btn.blue {
+        .admin-login {
             background-color: #0056b3;
         }
-        
+
         .button-icon {
             margin-right: 10px;
         }
@@ -154,13 +155,13 @@
             <h1 class="portal-heading">INSPECTOR<br>PORTAL</h1>
             <img src="be3bcde9fc55235aa4b035637d20db6ca32b2cad.png" alt="Train icon" class="login-image">
             <div class="login-buttons">
-                <a href="install.html" class="login-button inspector-login">
+                <a href="install.html" class="login-button inspector-login" id="install-button">
                     <span class="button-icon">
                         <img src="sl.png" alt="Sleeper icon">
                     </span>
                     INSTALL A NEW SLEEPER
                 </a>
-                <a href="scan.html" class="login-button admin-login">
+                <a href="scan.html" class="login-button admin-login" id="scan-button">
                     <span class="button-icon">
                         <img src="sp.png" alt="Scan icon">
                     </span>
@@ -169,5 +170,30 @@
             </div>
         </div>
     </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const installButton = document.getElementById('install-button');
+            const scanButton = document.getElementById('scan-button');
+
+            // Function to handle navigation
+            const navigateTo = (event, url) => {
+                // Prevent default behavior to handle navigation manually
+                event.preventDefault();
+                window.location.href = url;
+            };
+
+            // Add event listeners for both click (desktop) and touchstart (mobile)
+            if (installButton) {
+                installButton.addEventListener('click', (event) => navigateTo(event, 'install.html'));
+                installButton.addEventListener('touchstart', (event) => navigateTo(event, 'install.html'));
+            }
+
+            if (scanButton) {
+                scanButton.addEventListener('click', (event) => navigateTo(event, 'scan.html'));
+                scanButton.addEventListener('touchstart', (event) => navigateTo(event, 'scan.html'));
+            }
+        });
+    </script>
 </body>
 </html>
