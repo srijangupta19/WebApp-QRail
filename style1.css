@@ -1,0 +1,80 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f8f6f6;
+  text-align: center;
+}
+
+header {
+  background: #234E70;
+  color: white;
+  padding: 10px;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: 14px;
+  font-weight: bold;
+  text-align: right;
+}
+
+.train-icon {
+  width: 80px;
+  margin: 20px auto;
+}
+
+.btn {
+  display: block;
+  width: 80%;
+  margin: 10px auto;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn.green {
+  background: #2E8B57;
+  color: white;
+}
+
+.btn.blue {
+  background: #1E3D59;
+  color: white;
+}
+
+.card {
+  background: white;
+  margin: 15px auto;
+  padding: 15px;
+  width: 85%;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  text-align: left;
+}
+
+.form-card {
+  background: white;
+  margin: 15px auto;
+  padding: 15px;
+  width: 85%;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  text-align: left;
+}
+
+.form-card input,
+.form-card select {
+  width: 95%;
+  margin: 8px 0;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}

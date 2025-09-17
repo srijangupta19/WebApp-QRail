@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>QR Details</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { 
+      getFirestore, collection, getDocs, doc, getDoc, updateDoc, arrayUnion, increment 
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // 🔹 Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDVaRCfAz11NtcXp0WpDhHCc85QuyEbFSk",
+      authDomain: "sih-trial-122f8.firebaseapp.com",
+      projectId: "sih-trial-122f8",
+      storageBucket: "sih-trial-122f8.appspot.com",
+      messagingSenderId: "773497361291",
+      appId: "1:773497361291:web:3dc8ed3f42164c144c158e",
+      measurementId: "G-VJGRQZ71CB"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    let currentQR = new URLSearchParams(window.location.search).get("qr");
+
+    // 🔹 Fetch QR + parts
+    async function fetchParts() {
+      document.getElementById("qrTitle").innerText = currentQR;
+
+      // --- Parts Info ---
+      const partsRef = collection(db, "railway_parts", currentQR, "parts");
+      const partsSnap = await getDocs(partsRef);
+      const list = document.getElementById("partsList");
+      list.innerHTML = "";
+
+      if (partsSnap.empty) {
+        list.innerHTML = "<p>No parts found.</p>";
+        return;
+      }
+
+      partsSnap.forEach(docSnap => {
+        const data = docSnap.data();
+        const partDiv = document.createElement("div");
+        partDiv.className = "card";
+
+        const type = (data.part_type || "").toLowerCase();
+        const inspectionDates = data.inspection_dates?.join(", ") || "N/A";
+
+        let faultButtons = "";
+        let faultsDisplay = "";
+
+        if (["sleeper", "joint", "rail", "liner", "rail pad"].includes(type)) {
+          faultsDisplay = `Faults → Damaged: ${data.faults?.damaged || 0}`;
+          faultButtons = `<button onclick="increaseFault('${docSnap.id}','damaged')">+ Damaged</button>`;
+        } else if (type === "rail clip") {
+          faultsDisplay = `
+            Faults → Damaged: ${data.faults?.damaged || 0},
+            Unclipped: ${data.faults?.unclipped || 0},
+            Missing: ${data.faults?.missing || 0}
+          `;
+          faultButtons = `
+            <button onclick="increaseFault('${docSnap.id}','damaged')">+ Damaged</button>
+            <button onclick="increaseFault('${docSnap.id}','unclipped')">+ Unclipped</button>
+            <button onclick="increaseFault('${docSnap.id}','missing')">+ Missing</button>
+          `;
+        }
+
+        partDiv.innerHTML = `
+          <h4>${data.part_type} (ID: ${docSnap.id})</h4>
+          <p>Vendor: ${data.vendor}, Zone: ${data.zone}</p>
+          <p>Inspection Dates: ${inspectionDates}</p>
+          <p>Manufactured: ${data.manufacture_date}</p>
+          <p>Next Inspection: ${data.next_predicted_inspection}</p>
+          <p>Status: ${data.performance_class || "N/A"}</p>
+          <p>${faultsDisplay}</p>
+          ${faultButtons}
+        `;
+        list.appendChild(partDiv);
+      });
+    }
+
+    // 🔹 Increase Fault Counter
+    window.increaseFault = async function(partId, type) {
+      const ref = doc(db, "railway_parts", currentQR, "parts", partId);
+      await updateDoc(ref, { [`faults.${type}`]: increment(1) });
+      fetchParts();
+    };
+
+    // 🔹 Update QR inspection
+    window.addEventListener("DOMContentLoaded", () => {
+      fetchParts();
+      document.getElementById("updateForm").addEventListener("submit", async e => {
+        e.preventDefault();
+        const newDate = document.getElementById("qrDate").value;
+        const newStatus = document.getElementById("qrStatus").value;
+        await updateDoc(doc(db, "railway_parts", currentQR), {
+          inspection_dates: arrayUnion(newDate),
+          performance_class: newStatus
+        });
+        alert("✅ QR Updated!");
+        fetchParts();
+      });
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <button onclick="window.location.href='scan.html'">⬅</button>
+      <span class="title">भारतीय रेल <br> INDIAN RAILWAYS</span>
+    </div>
+  </header>
+
+  <main>
+    <h2 id="qrTitle">Loading...</h2>
+    <div id="partsList"></div>
+
+    <!-- Update QR Form -->
+    <form id="updateForm" class="form-card">
+      <h3>Update QR Inspection</h3>
+      <label>Inspection Date:</label>
+      <input type="date" id="qrDate" required>
+      <label>Status:</label>
+      <select id="qrStatus">
+        <option>Good</option>
+        <option>Average</option>
+        <option>Poor</option>
+        <option>Needs Replacement</option>
+      </select>
+      <button type="submit" class="btn blue">Update QR</button>
+    </form>
+  </main>
+</body>
+</html>

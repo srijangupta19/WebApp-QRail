@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Railways - QR Scanner</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            width: 100%;
+            padding: 10px 20px;
+            background-color: #0d47a1;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            text-align: right;
+            line-height: 1.2;
+            flex-grow: 1;
+        }
+
+        .app-name {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .app-subname {
+            font-size: 0.9em;
+            display: block;
+        }
+        
+        .back-arrow {
+            font-size: 2em;
+            color: white;
+            text-decoration: none;
+            margin-right: auto;
+        }
+        
+        .hamburger-menu {
+            display: none; /* Not used on this page, but keeping consistent */
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            text-align: center;
+            flex-grow: 1;
+            justify-content: center;
+        }
+        
+        .portal-heading {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        /* QR Scanner container */
+        #reader {
+            width: 100% !important;
+            max-width: 350px; /* Made bigger for better scanning */
+            margin: auto;
+            border: 2px solid #0056b3;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body>
+    <header class="header">
+        <a href="inspector-portal.html" class="back-arrow">&larr;</a>
+        <div class="logo">
+            <span class="app-name">भारतीय रेल</span>
+            <span class="app-subname">INDIAN RAILWAYS</span>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <h1 class="portal-heading">SCAN QR CODE</h1>
+        <div id="reader" style="width: 350px; margin: auto;"></div>
+    </main>
+
+    <script>
+        function onScanSuccess(decodedText, decodedResult) {
+            console.log(`Scan result: ${decodedText}`);
+            window.location.href = `details.html?qr=${encodeURIComponent(decodedText)}`;
+        }
+
+        function onScanError(errorMessage) {
+            console.error(`Scan error: ${errorMessage}`);
+        }
+
+        const html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader", { fps: 10, qrbox: { width: 300, height: 300 } }, false);
+        html5QrcodeScanner.render(onScanSuccess, onScanError);
+    </script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Install Sleeper</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // 🔹 Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDVaRCfAz11NtcXp0WpDhHCc85QuyEbFSk",
+      authDomain: "sih-trial-122f8.firebaseapp.com",
+      projectId: "sih-trial-122f8",
+      storageBucket: "sih-trial-122f8.appspot.com",
+      messagingSenderId: "773497361291",
+      appId: "1:773497361291:web:3dc8ed3f42164c144c158e",
+      measurementId: "G-VJGRQZ71CB"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("addPartForm");
+
+      form.addEventListener("submit", async e => {
+        e.preventDefault();
+
+        const data = {
+          part_type: document.getElementById("partType").value,
+          vendor: document.getElementById("vendor").value,
+          zone: document.getElementById("zone").value,
+          manufacture_date: document.getElementById("mDate").value,
+          next_predicted_inspection: document.getElementById("nDate").value,
+          inspection_dates: [document.getElementById("iDate").value],
+          performance_class: document.getElementById("status").value,
+          faults: { damaged: 0, unclipped: 0, missing: 0 }
+        };
+
+        const qrId = "QR" + Date.now();
+        await addDoc(collection(db, "railway_parts", qrId, "parts"), data);
+
+        alert(`✅ Sleeper installed with QR: ${qrId}`);
+        form.reset();
+      });
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>📌 Install a New Sleeper</h1>
+  </header>
+
+  <main>
+    <form id="addPartForm" class="form-card">
+      <h3>Install New part</h3>
+      <input type="text" id="partType" placeholder="Part Type" required>
+      <input type="text" id="vendor" placeholder="Vendor" required>
+      <input type="text" id="zone" placeholder="Zone" required>
+      <label>Manufacture Date:</label>
+      <input type="date" id="mDate" required>
+      <label>Next Inspection:</label>
+      <input type="date" id="nDate" required>
+      <label>Initial Inspection:</label>
+      <input type="date" id="iDate" required>
+      <select id="status">
+        <option>Good</option>
+        <option>Average</option>
+        <option>Poor</option>
+        <option>Needs Replacement</option>
+      </select>
+      <button type="submit" class="btn green">Install Sleeper</button>
+    </form>
+
+    <br>
+    <button class="btn blue" onclick="window.location.href='index.html'">⬅ Back to Portal</button>
+  </main>
+</body>
+</html>
