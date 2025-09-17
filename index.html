@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Railways</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+        }
+
+        .header {
+            width: 100%;
+            padding: 10px 20px;
+            background-color: #0d47a1;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .language-selector {
+            display: flex;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+
+        .language-icon {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+        
+        .logo {
+            text-align: right;
+            line-height: 1.2;
+        }
+
+        .app-name {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .app-subname {
+            font-size: 0.9em;
+            display: block;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            text-align: center;
+            flex-grow: 1;
+            justify-content: center;
+        }
+
+        .welcome-heading {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .train-image-container {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .train-image {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .login-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .login-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+        }
+
+        .inspector-login {
+            background-color: #28a745;
+        }
+
+        .admin-login {
+            background-color: #0056b3;
+        }
+
+        .button-icon {
+            margin-right: 10px;
+        }
+
+        .button-icon img {
+            height: 35px;
+            width: 35px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="language-selector">
+            <span class="language-icon">
+                <img src="bb2c2ba8f80f4cc2ebeebe77213c460048f09b40.png" alt="Language icon" style="height:24px;width:24px;vertical-align:middle;">
+            </span>
+            <span class="language-text">हिन्दी</span>
+        </div>
+        <div class="logo">
+            <span class="app-name">भारतीय रेल</span>
+            <span class="app-subname">INDIAN RAILWAYS</span>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <h1 class="welcome-heading">WELCOME</h1>
+        <div class="train-image-container">
+            <img src="be3bcde9fc55235aa4b035637d20db6ca32b2cad.png" alt="Train icon" class="train-image">
+        </div>
+        <div class="login-buttons">
+            <button class="login-button inspector-login">
+                <span class="button-icon">
+                    <img src="2975b0d93ea45fe95c00c45261f1048fc07047e9.png" alt="Inspector icon">
+                </span>
+                LOGIN AS INSPECTOR
+            </button>
+            <button class="login-button admin-login">
+                <span class="button-icon">
+                    <img src="6b62eade27e9bac7afa88754c3a0c46242c00882.png" alt="Admin icon">
+                </span>
+                LOGIN AS ADMIN
+            </button>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const inspectorButton = document.querySelector('.inspector-login');
+            const adminButton = document.querySelector('.admin-login');
+
+            inspectorButton.addEventListener('click', () => {
+                alert('Inspector login button clicked!');
+                // window.location.href = 'inspector-login.html';
+            });
+
+            adminButton.addEventListener('click', () => {
+                alert('Admin login button clicked!');
+                // window.location.href = 'admin-login.html';
+            });
+        
+         // Language toggle
+            langToggle.addEventListener('click', () => {
+                if (langText.textContent === 'हिन्दी') {
+                    langText.textContent = 'English';
+
+                    welcomeHeading.textContent = 'स्वागत है';
+                    inspectorButton.innerHTML = '<span class="button-icon"><img src="2975b0d93ea45fe95c00c45261f1048fc07047e9.png" alt="Inspector icon"></span> निरीक्षक लॉगिन';
+                    adminButton.innerHTML = '<span class="button-icon"><img src="6b62eade27e9bac7afa88754c3a0c46242c00882.png" alt="Admin icon"></span> व्यवस्थापक लॉगिन';
+
+                    appName.textContent = 'INDIAN RAILWAYS';
+                    appSubname.textContent = 'भारतीय रेल';
+
+                } else {
+                    langText.textContent = 'हिन्दी';
+
+                    welcomeHeading.textContent = 'WELCOME';
+                    inspectorButton.innerHTML = '<span class="button-icon"><img src="2975b0d93ea45fe95c00c45261f1048fc07047e9.png" alt="Inspector icon"></span> LOGIN AS INSPECTOR';
+                    adminButton.innerHTML = '<span class="button-icon"><img src="6b62eade27e9bac7afa88754c3a0c46242c00882.png" alt="Admin icon"></span> LOGIN AS ADMIN';
+
+                    appName.textContent = 'भारतीय रेल';
+                    appSubname.textContent = 'INDIAN RAILWAYS';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
