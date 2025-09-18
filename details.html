@@ -147,22 +147,17 @@
     </style>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import {
             getFirestore, collection, getDocs, doc, getDoc
         } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // 🔹 Firebase Config
-        const firebaseConfig = {
-            apiKey: "AIzaSyDVaRCfAz11NtcXp0WpDhHCc85QuyEbFSk",
-            authDomain: "sih-trial-122f8.firebaseapp.com",
-            projectId: "sih-trial-122f8",
-            storageBucket: "sih-trial-122f8.appspot.com",
-            messagingSenderId: "773497361291",
-            appId: "1:773497361291:web:3dc8ed3f42164c144c158e",
-            measurementId: "G-VJGRQZ71CB"
-        };
+        // Global variables provided by the environment
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getFirestore(app);
         let currentQR = new URLSearchParams(window.location.search).get("qr");
         const sections = ["Rail", "Rail Clip", "Sleeper", "Liner", "Rail Pad", "Joint"];
@@ -181,6 +176,12 @@
             lotDetailsContainer.innerHTML = '<p>Loading details...</p>';
 
             try {
+                // Ensure a user is authenticated before attempting to access Firestore
+                if (!auth.currentUser) {
+                    console.log("Waiting for authentication...");
+                    return;
+                }
+                
                 // Fetch Lot History
                 const qrRef = doc(db, "railway_parts", currentQR);
                 const qrSnap = await getDoc(qrRef);
@@ -257,8 +258,24 @@
             }
         };
 
-        // Initialize on page load
-        window.addEventListener("DOMContentLoaded", fetchDetails);
+        // Initialize Firebase and start data fetching
+        async function initializeApp() {
+            try {
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
+                
+                fetchDetails(); // Fetch data after successful authentication
+                
+            } catch (error) {
+                console.error("Firebase authentication failed:", error);
+                document.querySelector('.main-container').innerHTML = '<p>Authentication failed. Please check the console for details.</p>';
+            }
+        }
+
+        initializeApp();
     </script>
 </head>
 <body>
