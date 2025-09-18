@@ -258,8 +258,8 @@
             }
         };
 
-        // Initialize Firebase and start data fetching
-        async function initializeApp() {
+        // ✅ Initialize Firebase and start data fetching
+        async function initApp() {
             try {
                 if (initialAuthToken) {
                     await signInWithCustomToken(auth, initialAuthToken);
@@ -275,7 +275,7 @@
             }
         }
 
-        initializeApp();
+        initApp();
     </script>
 </head>
 <body>
