@@ -70,8 +70,28 @@
             justify-content: center;
         }
         
+        /* "Back to Portal" button at the top of the main content */
+        .btn.back-to-portal {
+            background-color: #0056b3;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px; /* Reduced padding */
+            border-radius: 8px; /* Slightly smaller border radius */
+            font-size: 1em; /* Reduced font size */
+            font-weight: bold;
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+            text-decoration: none;
+            width: auto; /* Changed from 100% to auto to make it smaller */
+        }
+        
         .portal-heading {
-            font-size: 2em;
+            font-size: 3em;
             font-weight: bold;
             color: #333;
             margin-bottom: 30px;
@@ -81,19 +101,28 @@
         /* QR Scanner container */
         #reader {
             width: 100% !important;
-            max-width: 350px; /* Made bigger for better scanning */
+            max-width: 550px;
             margin: auto;
             border: 2px solid #0056b3;
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
+        /* Custom CSS to increase size of scan options */
+        #reader div button, #reader div a {
+            font-size: 1.2em !important; /* Made the font of the buttons/links bigger */
+            padding: 12px 24px !important; /* Increased padding to make them bigger */
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+            box-sizing: border-box;
+        }
     </style>
     <script src="https://unpkg.com/html5-qrcode"></script>
 </head>
 <body>
     <header class="header">
-        <a href="inspector-portal.html" class="back-arrow">&larr;</a>
         <div class="logo">
             <span class="app-name">भारतीय रेल</span>
             <span class="app-subname">INDIAN RAILWAYS</span>
@@ -101,6 +130,9 @@
     </header>
 
     <main class="main-content">
+        <a href="index.html" class="btn back-to-portal">
+            ⬅ Back to Home
+        </a>
         <h1 class="portal-heading">SCAN QR CODE</h1>
         <div id="reader" style="width: 350px; margin: auto;"></div>
     </main>
@@ -116,7 +148,7 @@
         }
 
         const html5QrcodeScanner = new Html5QrcodeScanner(
-            "reader", { fps: 10, qrbox: { width: 300, height: 300 } }, false);
+            "reader", { fps: 10, qrbox: { width: 350, height: 350 } }, false);
         html5QrcodeScanner.render(onScanSuccess, onScanError);
     </script>
 </body>

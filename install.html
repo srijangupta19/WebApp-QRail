@@ -73,7 +73,7 @@
         /* Back to Portal Button at the top of the main content */
         .btn.back-to-portal {
             background-color: #0056b3;
-            margin-bottom: 20px; /* Spacing from the form */
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -115,15 +115,37 @@
             padding: 12px;
             border: 1px solid #ccc;
             border-radius: 8px;
-            font-size: 1em;
+            font-size: 1.1em;
             box-sizing: border-box;
+            /* The next lines style the select element */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        
+        /* Placeholder styling for selects */
+        select:required:invalid {
+            color: #777;
         }
 
         label {
             align-self: flex-start;
-            font-size: 0.9em;
+            font-size: 1.1em;
+            font-weight: bold;
             color: #555;
             margin-top: 5px;
+            display: block;
+            text-align: left;
+        }
+        
+        input::placeholder {
+            color: #777;
+            font-weight: normal;
+        }
+        
+        .form-section {
+            margin-bottom: 15px;
+            width: 100%;
         }
 
         /* Button Styles */
@@ -164,23 +186,49 @@
             ⬅ Back to Portal
         </a>
         <form id="addPartForm" class="form-card">
-            <h3>Install New part</h3>
-            <input type="text" id="partType" placeholder="Part Type" required>
-            <input type="text" id="vendor" placeholder="Vendor" required>
-            <input type="text" id="zone" placeholder="Zone" required>
-            <label for="mDate">Manufacture Date:</label>
-            <input type="date" id="mDate" required>
-            <label for="nDate">Next Inspection:</label>
-            <input type="date" id="nDate" required>
-            <label for="iDate">Initial Inspection:</label>
-            <input type="date" id="iDate" required>
-            <select id="status">
-                <option value="Good">Good</option>
-                <option value="Average">Average</option>
-                <option value="Poor">Poor</option>
-                <option value="Needs Replacement">Needs Replacement</option>
-            </select>
-            <button type="submit" class="btn green">Install Sleeper</button>
+            <h3>Details of New parts</h3>
+            
+            <div class="form-section">
+                <label for="zone">Zone:</label>
+                <select id="zone" required>
+                    <option value="" disabled selected>Select Zone</option>
+                    <option value="CR">Central Railway (CR)</option>
+                    <option value="ECoR">East Coast Railway (ECoR)</option>
+                    <option value="ECR">East Central Railway (ECR)</option>
+                    <option value="ER">Eastern Railway (ER)</option>
+                    <option value="NCR">North Central Railway (NCR)</option>
+                    <option value="NER">North Eastern Railway (NER)</option>
+                    <option value="NFR">Northeast Frontier Railway (NFR)</option>
+                    <option value="NR">Northern Railway (NR)</option>
+                    <option value="NWR">North Western Railway (NWR)</option>
+                    <option value="SCR">South Central Railway (SCR)</option>
+                    <option value="SECR">South East Central Railway (SECR)</option>
+                    <option value="SER">South Eastern Railway (SER)</option>
+                    <option value="SR">Southern Railway (SR)</option>
+                    <option value="SWR">South Western Railway (SWR)</option>
+                    <option value="WCR">West Central Railway (WCR)</option>
+                    <option value="WR">Western Railway (WR)</option>
+                    <option value="KMR">Konkan Railway (KMR)</option>
+                </select>
+            </div>
+            
+            <div class="form-section">
+                <label for="partType">Part Type:</label>
+                <select id="partType" required>
+                    <option value="" disabled selected>Select Part Type</option>
+                    <option value="Rail details">Rail</option>
+                    <option value="Sleeper details">Sleeper</option>
+                    <option value="Rail Clip details">Rail Clip</option>
+                    <option value="Liner details">Liner</option>
+                    <option value="Rail Pad details">Rail Pad</option>
+                    <option value="Joint details">Joint</option>
+                </select>
+            </div>
+
+            <div id="parts-container">
+            </div>
+
+            <button type="submit" class="btn green">Submit</button>
         </form>
     </main>
 
@@ -204,26 +252,83 @@
 
         window.addEventListener("DOMContentLoaded", () => {
             const form = document.getElementById("addPartForm");
+            const partTypeSelect = document.getElementById("partType");
+            const partsContainer = document.getElementById("parts-container");
+            
+            // Generate form fields based on selected part type
+            partTypeSelect.addEventListener('change', () => {
+                const selectedPartType = partTypeSelect.value;
+                partsContainer.innerHTML = ''; // Clear previous content
+
+                if (selectedPartType) {
+                    const sections = generatePartForms(selectedPartType);
+                    partsContainer.innerHTML = sections;
+                }
+            });
+
+            function generatePartForms(partType) {
+                const partName = partType.replace(' details', '');
+                const idPrefix = partName.toLowerCase().replace(/\s+/g, '');
+                const today = new Date().toISOString().split('T')[0];
+
+                return `
+                    <div class="form-section">
+                        <label for="${idPrefix}Vendor">Vendor:</label>
+                        <input type="text" id="${idPrefix}Vendor" placeholder="Enter Vendor Name" required>
+                    </div>
+                    <div class="form-section">
+                        <label for="${idPrefix}MfgDate">Manufacture Date:</label>
+                        <input type="date" id="${idPrefix}MfgDate" max="${today}" required>
+                    </div>
+                `;
+            }
 
             form.addEventListener("submit", async e => {
                 e.preventDefault();
 
-                const data = {
-                    part_type: document.getElementById("partType").value,
-                    vendor: document.getElementById("vendor").value,
-                    zone: document.getElementById("zone").value,
-                    manufacture_date: document.getElementById("mDate").value,
-                    next_predicted_inspection: document.getElementById("nDate").value,
-                    inspection_dates: [document.getElementById("iDate").value],
-                    performance_class: document.getElementById("status").value,
-                    faults: { damaged: 0, unclipped: 0, missing: 0 }
-                };
+                const partType = partTypeSelect.value;
+                let data = {};
+                
+                if (partType) {
+                    const partName = partType.replace(' details', '');
+                    const idPrefix = partName.toLowerCase().replace(/\s+/g, '');
 
-                const qrId = "QR" + Date.now();
-                await addDoc(collection(db, "railway_parts", qrId, "parts"), data);
+                    const vendor = document.getElementById(idPrefix + 'Vendor').value;
+                    const mfgDate = document.getElementById(idPrefix + 'MfgDate').value;
+                    
+                    const today = new Date().toISOString().split('T')[0];
 
-                alert(`✅ Sleeper installed with QR: ${qrId}`);
-                form.reset();
+                    data = {
+                        part_type: partType,
+                        vendor: vendor,
+                        zone: document.getElementById("zone").value,
+                        manufacture_date: mfgDate,
+                        next_predicted_inspection: "", 
+                        inspection_dates: [today],
+                        performance_class: "Good",
+                        faults: { damaged: 0, unclipped: 0, missing: 0 }
+                    };
+
+                    const mfgDateObject = new Date(mfgDate);
+                    let nextInspectionDate = new Date(mfgDateObject);
+                    
+                    if (partType === "Sleeper details") {
+                        nextInspectionDate.setFullYear(mfgDateObject.getFullYear() + 2); // 2 years
+                    } else { // Rail, Rail Clip, Liner, Rail Pad, Joint
+                        nextInspectionDate.setFullYear(mfgDateObject.getFullYear() + 1); // 1 year
+                    }
+
+                    data.next_predicted_inspection = nextInspectionDate.toISOString().split('T')[0];
+
+                    const qrId = "QR" + Date.now();
+                    await addDoc(collection(db, "railway_parts", qrId, "parts"), data);
+                    
+                    alert(`✅ Part installed with QR: ${qrId}`);
+                    form.reset();
+                    partsContainer.innerHTML = ''; // Clear parts form after submission
+                } else {
+                    alert('Please select a part type.');
+                }
             });
         });
     </script>
