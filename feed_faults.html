@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feed Faults - Indian Railways</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         /* General Styles */
         body {
@@ -65,7 +67,7 @@
         }
         .btn.back-to-portal {
             background-color: #0056b3;
-            margin-bottom: 20px; /* Spacing from the form */
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -93,7 +95,7 @@
             font-size: 1.8em;
             color: #0d47a1;
             font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
         }
 
         /* Fault Sections */
@@ -159,7 +161,7 @@
         }
 
         .count-controls .minus {
-            background-color: #ff6f61; /* Red color */
+            background-color: #ff6f61;
             color: white;
         }
 
@@ -168,7 +170,7 @@
         }
 
         .count-controls .plus {
-            background-color: #4caf50; /* Green color */
+            background-color: #4caf50;
             color: white;
         }
 
@@ -202,6 +204,76 @@
 
         .save-btn:hover {
             background-color: #1b5e20;
+        }
+
+        /* New styles for location and map */
+        .location-section {
+            width: 100%;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+            text-align: left; /* Aligned left for better readability */
+        }
+        
+        .location-section h2 {
+            font-size: 1.5em;
+            color: #0d47a1;
+            margin-top: 0;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .location-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .location-info .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .location-info .row:last-child {
+            border-bottom: none;
+        }
+        
+        .location-info .row .label {
+            display: flex;
+            align-items: center;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .location-info .row .value {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .location-info .distance-row {
+            justify-content: center;
+            margin-top: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .location-info .row i {
+            margin-right: 10px;
+            color: #0d47a1;
+        }
+        
+        #map {
+            height: 300px;
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -311,8 +383,31 @@
         </div>
 
         <button class="save-btn" onclick="saveFaults()">SAVE FAULTS</button>
+        
+        <div class="location-section">
+            <h2>Location & Tracking</h2>
+            <div class="location-info">
+                <div class="row">
+                    <div class="label"><i class="fas fa-map-marker-alt"></i>Initial Location</div>
+                    <div class="value">
+                        <span id="initial-lat">...</span>, <span id="initial-long">...</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="label"><i class="fas fa-walking"></i>Current Position</div>
+                    <div class="value">
+                        <span id="current-lat">...</span>, <span id="current-long">...</span>
+                    </div>
+                </div>
+                <div class="row distance-row">
+                    Distance Covered: <span id="distance-display">0</span> meters
+                </div>
+            </div>
+            <div id="map"></div>
+        </div>
     </main>
 
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
         const parts = {
             'railClip-missing': 0,
@@ -324,7 +419,13 @@
             'railPad-damaged': 0,
             'joints-faulty': 0
         };
-
+        
+        let initialLocation = null;
+        
+        let map = null;
+        let initialMarker = null;
+        let userMarker = null;
+        
         function updateCount(id, change) {
             const countElement = document.getElementById(`${id}-count`);
             let currentCount = parseInt(countElement.textContent, 10);
@@ -332,22 +433,85 @@
             currentCount += change;
             
             if (currentCount < 0) {
-                currentCount = 0; // Prevent negative numbers
+                currentCount = 0;
             }
             
             countElement.textContent = currentCount;
-            parts[id] = currentCount; // Update the JavaScript object
+            parts[id] = currentCount;
         }
 
         function saveFaults() {
-            // This is where you would send the 'parts' object to your backend (Firebase).
             const qrId = new URLSearchParams(window.location.search).get("qr");
             console.log(`Saving faults for QR ID: ${qrId}`);
             console.log("Fault data:", parts);
             
             alert("Faults have been saved!");
-            // You can redirect back to the main page after saving
-            // window.location.href = `lot_details.html?qr=${qrId}`;
+        }
+
+        function initMap(initialLat, initialLong) {
+            if (map !== null) {
+                map.remove();
+            }
+            map = L.map('map').setView([initialLat, initialLong], 15);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            const initialIcon = L.icon({
+                iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                shadowSize: [41, 41]
+            });
+
+            initialMarker = L.marker([initialLat, initialLong], { icon: initialIcon }).addTo(map)
+                .bindPopup('Initial Location').openPopup();
+
+            userMarker = L.circleMarker([initialLat, initialLong], {
+                radius: 8,
+                color: '#007bff',
+                fillColor: '#007bff',
+                fillOpacity: 0.8
+            }).addTo(map);
+        }
+
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371e3; // metres
+            const φ1 = lat1 * Math.PI/180;
+            const φ2 = lat2 * Math.PI/180;
+            const Δφ = (lat2-lat1) * Math.PI/180;
+            const Δλ = (lon2-lon1) * Math.PI/180;
+
+            const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+                      Math.cos(φ1) * Math.cos(φ2) *
+                      Math.sin(Δλ/2) * Math.sin(Δλ/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        function updateLocationOnMap(position) {
+            const currentLat = position.coords.latitude;
+            const currentLong = position.coords.longitude;
+            
+            if (!initialLocation) {
+                initialLocation = { lat: currentLat, long: currentLong };
+                document.getElementById('initial-lat').textContent = initialLocation.lat.toFixed(6);
+                document.getElementById('initial-long').textContent = initialLocation.long.toFixed(6);
+                initMap(initialLocation.lat, initialLocation.long);
+            }
+            
+            document.getElementById('current-lat').textContent = currentLat.toFixed(6);
+            document.getElementById('current-long').textContent = currentLong.toFixed(6);
+
+            const distance = getDistance(initialLocation.lat, initialLocation.long, currentLat, currentLong);
+            document.getElementById('distance-display').textContent = distance.toFixed(2);
+
+            if (userMarker) {
+                userMarker.setLatLng([currentLat, currentLong]);
+                map.setView([currentLat, currentLong], 15);
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -356,6 +520,15 @@
                 document.getElementById('qrIdDisplay').textContent = `QR Id: ${qrId}`;
             } else {
                 document.getElementById('qrIdDisplay').textContent = `QR Id: N/A`;
+            }
+
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(updateLocationOnMap, (error) => {
+                    console.error('Geolocation error:', error);
+                    alert('Could not retrieve your location. Please enable location services.');
+                }, { enableHighAccuracy: true });
+            } else {
+                alert('Geolocation is not supported by your browser.');
             }
         });
     </script>
