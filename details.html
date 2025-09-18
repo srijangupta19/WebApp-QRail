@@ -153,7 +153,15 @@
         } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         // Global variables provided by the environment
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const firebaseConfig = {
+  apiKey: "AIzaSyDVaRCfAz11NtcXp0WpDhHCc85QuyEbFSk",
+  authDomain: "sih-trial-122f8.firebaseapp.com",
+  projectId: "sih-trial-122f8",
+  storageBucket: "sih-trial-122f8.firebasestorage.app",
+  messagingSenderId: "773497361291",
+  appId: "1:773497361291:web:3dc8ed3f42164c144c158e",
+  measurementId: "G-VJGRQZ71CB"
+};
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
         const app = initializeApp(firebaseConfig);
