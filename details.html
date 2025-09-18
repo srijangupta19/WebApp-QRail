@@ -1,581 +1,291 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Lot Details - Indian Railways</title>
-
-    <style>
-
-        /* General Styles */
-
-        body {
-
-            font-family: 'Times New Roman', Times, serif;
-
-            background-color: #f0f2f5;
-
-            margin: 0;
-
-            color: #333;
-
-            display: flex;
-
-            flex-direction: column;
-
-            min-height: 100vh;
-
-        }
-
-
-
-        /* Header Styles */
-
-        .header {
-
-            width: 100%;
-
-            padding: 10px 20px;
-
-            background-color: #0d47a1;
-
-            color: white;
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            box-sizing: border-box;
-
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-        }
-
-
-
-        .header .logo {
-
-            text-align: right;
-
-            line-height: 1.2;
-
-        }
-
-
-
-        .header .logo .app-name {
-
-            font-size: 1.5em;
-
-            font-weight: bold;
-
-        }
-
-
-
-        .header .logo .app-subname {
-
-            font-size: 0.9em;
-
-            display: block;
-
-        }
-
-
-
-        .header .back-button {
-
-            font-size: 1.5em;
-
-            color: white;
-
-            text-decoration: none;
-
-            cursor: pointer;
-
-        }
-
-
-
-        /* Top Button Container */
-
-        .top-button-container {
-
-            width: 100%;
-
-            padding: 10px 20px;
-
-            box-sizing: border-box;
-
-            display: flex;
-
-            justify-content: flex-end;
-
-            margin-top: 10px;
-
-        }
-
-
-
-        /* Main Content and Container */
-
-        .main-container {
-
-            display: flex;
-
-            flex-wrap: wrap;
-
-            padding: 20px;
-
-            gap: 20px;
-
-            flex-grow: 1;
-
-        }
-
-
-
-        .content-section {
-
-            background-color: white;
-
-            padding: 20px;
-
-            border-radius: 8px;
-
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
-            flex: 1 1 300px;
-
-        }
-
-
-
-        .content-section.history-section {
-
-            flex: 2 1 400px;
-
-            display: flex;
-
-            flex-direction: column;
-
-        }
-
-
-
-        .history-list {
-
-            list-style: none;
-
-            padding: 0;
-
-            margin: 0;
-
-        }
-
-
-
-        .history-list li {
-
-            border-bottom: 1px solid #eee;
-
-            padding: 10px 0;
-
-        }
-
-
-
-        h2 {
-
-            margin-top: 0;
-
-            font-size: 1.5em;
-
-            border-bottom: 2px solid #ccc;
-
-            padding-bottom: 10px;
-
-            margin-bottom: 20px;
-
-        }
-
-
-
-        .details-card {
-
-            border: 1px solid #ddd;
-
-            border-radius: 6px;
-
-            padding: 15px;
-
-            margin-bottom: 20px;
-
-            background-color: #f9f9f9;
-
-        }
-
-
-
-        .details-card p {
-
-            margin: 5px 0;
-
-            line-height: 1.5;
-
-        }
-
-
-
-        .details-card strong {
-
-            display: inline-block;
-
-            min-width: 100px;
-
-        }
-
-
-
-        .feed-faults-btn {
-
-            background-color: #2e7d32;
-
-            color: white;
-
-            border: none;
-
-            padding: 15px 30px;
-
-            font-size: 1em;
-
-            font-weight: bold;
-
-            border-radius: 8px;
-
-            cursor: pointer;
-
-            text-align: center;
-
-            transition: background-color 0.3s ease;
-
-        }
-
-
-
-        .feed-faults-btn:hover {
-
-            background-color: #1b5e20;
-
-        }
-
-
-
-        /* Responsive Layout */
-
-        @media (max-width: 768px) {
-
-            .main-container {
-
-                flex-direction: column;
-
-            }
-
-        }
-
-    </style>
-
-    <script type="module">
-
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-        import {
-
-            getFirestore, collection, getDocs, doc, getDoc
-
-        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-
-
-        // 🔹 Firebase Config
-
-        const firebaseConfig = {
-
-            apiKey: "AIzaSyDVaRCfAz11NtcXp0WpDhHCc85QuyEbFSk",
-
-            authDomain: "sih-trial-122f8.firebaseapp.com",
-
-            projectId: "sih-trial-122f8",
-
-            storageBucket: "sih-trial-122f8.appspot.com",
-
-            messagingSenderId: "773497361291",
-
-            appId: "1:773497361291:web:3dc8ed3f42164c144c158e",
-
-            measurementId: "G-VJGRQZ71CB"
-
-        };
-
-
-
-        const app = initializeApp(firebaseConfig);
-
-        const db = getFirestore(app);
-
-        let currentQR = new URLSearchParams(window.location.search).get("qr");
-
-        const sections = ["Rail", "Rail Clip", "Sleeper", "Liner", "Rail Pad", "Joint"];
-
-
-
-        // 🔹 Fetch and Render Data
-
-        async function fetchDetails() {
-
-            if (!currentQR) {
-
-                document.querySelector('.main-container').innerHTML = '<p>No QR code scanned. Please go back and scan a QR code.</p>';
-
-                return;
-
-            }
-
-
-
-            const historyList = document.getElementById("historyList");
-
-            const lotDetailsContainer = document.getElementById("lotDetails");
-
-           
-
-            historyList.innerHTML = '<p>Loading history...</p>';
-
-            lotDetailsContainer.innerHTML = '<p>Loading details...</p>';
-
-
-
-            try {
-
-                // Fetch Lot History
-
-                const qrRef = doc(db, "railway_parts", currentQR);
-
-                const qrSnap = await getDoc(qrRef);
-
-                if (qrSnap.exists()) {
-
-                    const data = qrSnap.data();
-
-                    const inspectionHistory = data.inspection_history || [];
-
-                    historyList.innerHTML = "";
-
-                    if (inspectionHistory.length === 0) {
-
-                        historyList.innerHTML = "<p>No inspection history available.</p>";
-
-                    } else {
-
-                        inspectionHistory.forEach(historyItem => {
-
-                            const li = document.createElement("li");
-
-                            li.textContent = `Date: ${historyItem.date}, Status: ${historyItem.status}`;
-
-                            historyList.appendChild(li);
-
-                        });
-
-                    }
-
-                } else {
-
-                    historyList.innerHTML = "<p>No QR lot found in database.</p>";
-
-                }
-
-
-
-                // Fetch Parts Details
-
-                const partsRef = collection(db, "railway_parts", currentQR, "parts");
-
-                const partsSnap = await getDocs(partsRef);
-
-                lotDetailsContainer.innerHTML = ""; // Clear existing content
-
-               
-
-                if (partsSnap.empty) {
-
-                    lotDetailsContainer.innerHTML = "<p>No parts found for this QR code.</p>";
-
-                } else {
-
-                    const partsByType = {};
-
-                    partsSnap.forEach(docSnap => {
-
-                        const data = { id: docSnap.id, ...docSnap.data() };
-
-                        const type = data.part_type.toLowerCase();
-
-                        if (!partsByType[type]) {
-
-                            partsByType[type] = [];
-
-                        }
-
-                        partsByType[type].push(data);
-
-                    });
-
-
-
-                    sections.forEach(sectionName => {
-
-                        const type = sectionName.toLowerCase();
-
-                        if (partsByType[type]) {
-
-                            const partData = partsByType[type][0]; // Assuming one entry per type
-
-                            const detailsCard = createDetailsCard(partData);
-
-                            lotDetailsContainer.appendChild(detailsCard);
-
-                        }
-
-                    });
-
-                }
-
-
-
-            } catch (error) {
-
-                console.error("Error fetching data: ", error);
-
-                lotDetailsContainer.innerHTML = "<p>Error loading details. Please try again.</p>";
-
-                historyList.innerHTML = "<p>Error loading history.</p>";
-
-            }
-
-        }
-
-
-
-        function createDetailsCard(data) {
-
-            const cardDiv = document.createElement("div");
-
-            cardDiv.className = "details-card";
-
-
-
-            cardDiv.innerHTML = `
-
-                <h3>${data.part_type}</h3>
-
-                <p><strong>Vendor:</strong> ${data.vendor || "N/A"}</p>
-
-                <p><strong>Mfg. Date:</strong> ${data.manufacture_date || "N/A"}</p>
-
-            `;
-
-            return cardDiv;
-
-        }
-
-
-
-        // 🔹 Navigate to faults page
-
-        window.goToFaults = function() {
-
-            if (currentQR) {
-
-                window.location.href = `feed_faults.html?qr=${encodeURIComponent(currentQR)}`;
-
-            } else {
-
-                alert("No QR code detected.");
-
-            }
-
-        };
-
-
-
-        // Initialize on page load
-
-        window.addEventListener("DOMContentLoaded", fetchDetails);
-
-    </script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lot Details - Indian Railways</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            width: 100%;
+            padding: 10px 20px;
+            background-color: #0d47a1;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header .logo {
+            text-align: right;
+            line-height: 1.2;
+        }
+
+        .header .logo .app-name {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .header .logo .app-subname {
+            font-size: 0.9em;
+            display: block;
+        }
+
+        .header .back-button {
+            font-size: 1.5em;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Top Button Container */
+        .top-button-container {
+            width: 100%;
+            padding: 10px 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        /* Main Content and Container */
+        .main-container {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+            gap: 20px;
+            flex-grow: 1;
+        }
+
+        .content-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            flex: 1 1 300px;
+        }
+
+        .content-section.history-section {
+            flex: 2 1 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .history-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .history-list li {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 1.5em;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .details-card {
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .details-card p {
+            margin: 5px 0;
+            line-height: 1.5;
+        }
+
+        .details-card strong {
+            display: inline-block;
+            min-width: 100px;
+        }
+
+        .feed-faults-btn {
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1em;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .feed-faults-btn:hover {
+            background-color: #1b5e20;
+        }
+
+        /* Responsive Layout */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import {
+            getFirestore, collection, getDocs, doc, getDoc
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // 🔹 Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDVaRCfAz11NtcXp0WpDhHCc85QuyEbFSk",
+            authDomain: "sih-trial-122f8.firebaseapp.com",
+            projectId: "sih-trial-122f8",
+            storageBucket: "sih-trial-122f8.appspot.com",
+            messagingSenderId: "773497361291",
+            appId: "1:773497361291:web:3dc8ed3f42164c144c158e",
+            measurementId: "G-VJGRQZ71CB"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        let currentQR = new URLSearchParams(window.location.search).get("qr");
+        const sections = ["Rail", "Rail Clip", "Sleeper", "Liner", "Rail Pad", "Joint"];
+
+        // 🔹 Fetch and Render Data
+        async function fetchDetails() {
+            if (!currentQR) {
+                document.querySelector('.main-container').innerHTML = '<p>No QR code scanned. Please go back and scan a QR code.</p>';
+                return;
+            }
+
+            const historyList = document.getElementById("historyList");
+            const lotDetailsContainer = document.getElementById("lotDetails");
+            
+            historyList.innerHTML = '<p>Loading history...</p>';
+            lotDetailsContainer.innerHTML = '<p>Loading details...</p>';
+
+            try {
+                // Fetch Lot History
+                const qrRef = doc(db, "railway_parts", currentQR);
+                const qrSnap = await getDoc(qrRef);
+                if (qrSnap.exists()) {
+                    const data = qrSnap.data();
+                    const inspectionHistory = data.inspection_history || [];
+                    historyList.innerHTML = "";
+                    if (inspectionHistory.length === 0) {
+                        historyList.innerHTML = "<p>No inspection history available.</p>";
+                    } else {
+                        inspectionHistory.forEach(historyItem => {
+                            const li = document.createElement("li");
+                            li.textContent = `Date: ${historyItem.date}, Status: ${historyItem.status}`;
+                            historyList.appendChild(li);
+                        });
+                    }
+                } else {
+                    historyList.innerHTML = "<p>No QR lot found in database.</p>";
+                }
+
+                // Fetch Parts Details
+                const partsRef = collection(db, "railway_parts", currentQR, "parts");
+                const partsSnap = await getDocs(partsRef);
+                lotDetailsContainer.innerHTML = ""; // Clear existing content
+                
+                if (partsSnap.empty) {
+                    lotDetailsContainer.innerHTML = "<p>No parts found for this QR code.</p>";
+                } else {
+                    const partsByType = {};
+                    partsSnap.forEach(docSnap => {
+                        const data = { id: docSnap.id, ...docSnap.data() };
+                        const type = data.part_type.toLowerCase();
+                        if (!partsByType[type]) {
+                            partsByType[type] = [];
+                        }
+                        partsByType[type].push(data);
+                    });
+
+                    sections.forEach(sectionName => {
+                        const type = sectionName.toLowerCase();
+                        if (partsByType[type]) {
+                            const partData = partsByType[type][0]; // Assuming one entry per type
+                            const detailsCard = createDetailsCard(partData);
+                            lotDetailsContainer.appendChild(detailsCard);
+                        }
+                    });
+                }
+
+            } catch (error) {
+                console.error("Error fetching data: ", error);
+                lotDetailsContainer.innerHTML = "<p>Error loading details. Please try again.</p>";
+                historyList.innerHTML = "<p>Error loading history.</p>";
+            }
+        }
+
+        function createDetailsCard(data) {
+            const cardDiv = document.createElement("div");
+            cardDiv.className = "details-card";
+
+            cardDiv.innerHTML = `
+                <h3>${data.part_type}</h3>
+                <p><strong>Vendor:</strong> ${data.vendor || "N/A"}</p>
+                <p><strong>Mfg. Date:</strong> ${data.manufacture_date || "N/A"}</p>
+            `;
+            return cardDiv;
+        }
+
+        // 🔹 Navigate to faults page
+        window.goToFaults = function() {
+            if (currentQR) {
+                window.location.href = `feed_faults.html?qr=${encodeURIComponent(currentQR)}`;
+            } else {
+                alert("No QR code detected.");
+            }
+        };
+
+        // Initialize on page load
+        window.addEventListener("DOMContentLoaded", fetchDetails);
+    </script>
 </head>
-
 <body>
+    <header class="header">
+        <button class="back-button" onclick="window.location.href='scan.html'">&#x2630;</button>
+        <div class="logo">
+            <span class="app-name">भारतीय रेल</span>
+            <span class="app-subname">INDIAN RAILWAYS</span>
+        </div>
+    </header>
 
-    <header class="header">
+    <div class="top-button-container">
+        <button class="feed-faults-btn" onclick="goToFaults()">FEED FAULTS</button>
+    </div>
 
-        <button class="back-button" onclick="window.location.href='scan.html'">&#x2630;</button>
+    <main class="main-container">
+        <section class="content-section">
+            <h2>Lot Details</h2>
+            <div id="lotDetails">
+                </div>
+        </section>
 
-        <div class="logo">
-
-            <span class="app-name">भारतीय रेल</span>
-
-            <span class="app-subname">INDIAN RAILWAYS</span>
-
-        </div>
-
-    </header>
-
-
-
-    <div class="top-button-container">
-
-        <button class="feed-faults-btn" onclick="goToFaults()">FEED FAULTS</button>
-
-    </div>
-
-
-
-    <main class="main-container">
-
-        <section class="content-section">
-
-            <h2>Lot Details</h2>
-
-            <div id="lotDetails">
-
-                </div>
-
-        </section>
-
-
-
-        <section class="content-section history-section">
-
-            <h2>History</h2>
-
-            <ul id="historyList">
-
-                </ul>
-
-        </section>
-
-    </main>
-
+        <section class="content-section history-section">
+            <h2>History</h2>
+            <ul id="historyList">
+                </ul>
+        </section>
+    </main>
 </body>
-
 </html>
