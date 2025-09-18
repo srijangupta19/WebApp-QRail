@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Code Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8fafc;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 900px;
+      display: flex;
+      gap: 30px;
+    }
+    .form-section, .qr-section {
+      flex: 1;
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #1e293b;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #334155;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      font-size: 14px;
+    }
+    input:focus, select:focus {
+      border-color: #3b82f6;
+      outline: none;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      background: #2563eb;
+      color: #fff;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1d4ed8;
+    }
+     .qr-preview {
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    color: #94a3b8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  /* centers horizontally */
+    justify-content: center; /* centers vertically */
+    min-height: 300px;  /* keeps enough space for QR */
+  }
+  #qrcode {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Left form section -->
+    <div class="form-section">
+      <h2>Item Information</h2>
+      <form id="qrForm">
+        <label>Vendor Name *</label>
+        <input type="text" id="vendor" placeholder="e.g., RailTech Solutions" required>
+        
+        <label>Lot Number *</label>
+        <input type="text" id="lot" placeholder="e.g., LOT-2024-001" required>
+        
+        <label>Item Type *</label>
+        <select id="itemType" required>
+          <option value="">Select item type</option>
+          <option>Track Fitting</option>
+          <option>Fastener</option>
+          <option>Clamp</option>
+          <option>Other</option>
+        </select>
+        
+        <label>Manufacture Date</label>
+        <input type="date" id="mfgDate">
+        
+        <label>Supply Date</label>
+        <input type="date" id="supplyDate">
+        
+        <label>Warranty Period</label>
+        <select id="warranty">
+          <option value="">Select warranty period</option>
+          <option>6 Months</option>
+          <option>1 Year</option>
+          <option>2 Years</option>
+          <option>5 Years</option>
+        </select>
+        
+        <button type="submit">Generate QR Code</button>
+      </form>
+    </div>
+    
+    <!-- Right QR Code section -->
+    <div class="qr-section">
+      <h2>Generated QR Code</h2>
+      <div class="qr-preview">
+        <p>Fill out the form to generate a QR code</p>
+        <div id="qrcode"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR code library -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+  <script>
+    const form = document.getElementById("qrForm");
+    const qrContainer = document.getElementById("qrcode");
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      qrContainer.innerHTML = ""; // clear old QR
+      
+      const data = {
+        vendor: document.getElementById("vendor").value,
+        lot: document.getElementById("lot").value,
+        itemType: document.getElementById("itemType").value,
+        mfgDate: document.getElementById("mfgDate").value,
+        supplyDate: document.getElementById("supplyDate").value,
+        warranty: document.getElementById("warranty").value,
+      };
+
+      new QRCode(qrContainer, {
+        text: JSON.stringify(data, null, 2),
+        width: 200,
+        height: 200,
+      });
+    });
+  </script>
+</body>
+</html>
