@@ -116,7 +116,7 @@
     .details-card p { margin: 5px 0; line-height: 1.5; }
     .details-card strong { display: inline-block; min-width: 100px; }
 
-    /* History grid styling from first version */
+    /* History grid styling */
     .history-list {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -169,7 +169,6 @@ const db = getFirestore(app);
 let currentQR = new URLSearchParams(window.location.search).get("qr");
 const sections = ["Rail", "Rail Clip", "Sleeper", "Liner", "Rail Pad", "Joint"];
 
-// Fetch and Render Data
 async function fetchDetails() {
     if (!currentQR) {
         document.querySelector('.main-container').innerHTML = '<p>No QR code scanned. Please go back and scan a QR code.</p>';
@@ -185,19 +184,19 @@ async function fetchDetails() {
     try {
         if (!auth.currentUser) return;
 
-        // Fetch Lot History
+        // Fetch Lot History (dates only)
         const qrRef = doc(db, "railway_parts", currentQR);
         const qrSnap = await getDoc(qrRef);
+        historyList.innerHTML = "";
         if (qrSnap.exists()) {
             const data = qrSnap.data();
             const inspectionHistory = data.inspection_dates || [];
-            historyList.innerHTML = "";
             if (inspectionHistory.length === 0) {
                 historyList.innerHTML = "<p>No inspection history available.</p>";
             } else {
                 inspectionHistory.forEach(h => {
                     const li = document.createElement("li");
-                    li.textContent = `Date: ${h.date}, Status: ${h.status}`;
+                    li.textContent = h.date || "Unknown Date"; // Only date
                     historyList.appendChild(li);
                 });
             }
@@ -307,7 +306,7 @@ initApp();
 
     <section class="content-section history-section">
         <h2>History</h2>
-        <ul id="historyList"></ul>
+        <ul id="historyList" class="history-list"></ul>
     </section>
 </main>
 </body>
