@@ -75,7 +75,7 @@
         const qrSnap = await getDoc(qrRef);
         if (qrSnap.exists()) {
           const data = qrSnap.data();
-          const inspectionHistory = data.inspection_history || [];
+          const inspectionHistory = data.inspection_dates || [];
           historyList.innerHTML = "";
           if (inspectionHistory.length === 0) {
             historyList.innerHTML = "<p>No inspection history available.</p>";
