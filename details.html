@@ -196,7 +196,18 @@ async function fetchDetails() {
             } else {
                 inspectionHistory.forEach(h => {
                     const li = document.createElement("li");
-                    li.textContent = h.date || "Unknown Date"; // Only date
+                    let displayDate = "Unknown Date";
+
+// If Firestore Timestamp
+if (h instanceof Object && h.toDate) {
+    displayDate = h.toDate().toLocaleDateString(); // formats to local date
+} 
+// If string stored directly
+else if (typeof h === "string") {
+    displayDate = h;
+}
+
+li.textContent = displayDate;
                     historyList.appendChild(li);
                 });
             }
