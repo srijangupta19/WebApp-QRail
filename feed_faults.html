@@ -287,9 +287,9 @@
     </header>
 
     <main class="main-content">
-        <a href="details.html" class="btn back-to-portal">
-            ⬅ Back to lot details
-        </a>
+        <a id="backToDetailsBtn" class="btn back-to-portal">
+    ⬅ Back to lot details
+</a>
         <div class="qr-id-header">
             <h1 id="qrIdDisplay">QR Id: QR0001</h1>
         </div>
@@ -530,6 +530,17 @@
             } else {
                 alert('Geolocation is not supported by your browser.');
             }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const qrId = new URLSearchParams(window.location.search).get("qr");
+    if (qrId) {
+        document.getElementById('qrIdDisplay').textContent = `QR Id: ${qrId}`;
+        // set back button link with QR param
+        document.getElementById('backToDetailsBtn').href = `details.html?qr=${encodeURIComponent(qrId)}`;
+    } else {
+        document.getElementById('qrIdDisplay').textContent = `QR Id: N/A`;
+    }
+});
         });
     </script>
 </body>
